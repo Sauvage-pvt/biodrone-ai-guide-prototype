@@ -19,7 +19,6 @@
   .card { background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb; transition: all 0.3s; }
   .card.highlight { border-color: #3dd68c; box-shadow: 0 0 0 4px rgba(61,214,140,0.25); background: #f0fff6; }
   .card h3 { color: #0d3b2e; margin-bottom: 8px; }
-  /* Floating widget */
   #guide-bubble { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: #0d3b2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 9999; }
   #guide-panel { position: fixed; bottom: 96px; right: 24px; width: 380px; height: 520px; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 9999; overflow: hidden; }
   #guide-panel.open { display: flex; }
@@ -45,45 +44,23 @@
     <a href="#start">Kom i gang</a>
   </nav>
 </header>
-
 <div class="hero">
   <h1>Skogforvaltning gjort enklere</h1>
   <p>Last opp dronebilder og få AI-analyse av trær, høyde, skade og mer – på minutter.</p>
   <a href="#start" class="btn" id="start-btn">Kom i gang</a>
 </div>
-
 <div class="content">
   <div class="cards">
-    <div class="card" id="trees">
-      <h3>Telle trær & måle høyde</h3>
-      <p>Full dekning i stedet for stikkprøver. Eksporter til GIS-systemer.</p>
-    </div>
-    <div class="card" id="damage">
-      <h3>Skadevurdering</h3>
-      <p>Rask deteksjon av stormskader, insektangrep og andre endringer.</p>
-    </div>
-    <div class="card" id="upload">
-      <h3>Last opp bilder</h3>
-      <p>Opprett prosjekt og last opp drone- eller flybilder direkte i portalen.</p>
-    </div>
-    <div class="card" id="custom">
-      <h3>Egne AI-modeller</h3>
-      <p>Tren modellen til å kjenne igjen spesifikke treslag eller skadetyper.</p>
-    </div>
-    <div class="card" id="start">
-      <h3>Kom i gang</h3>
-      <p>Opprett konto og start ditt første prosjekt. Gratis å prøve.</p>
-    </div>
+    <div class="card" id="trees"><h3>Telle trær & måle høyde</h3><p>Full dekning i stedet for stikkprøver. Eksporter til GIS-systemer.</p></div>
+    <div class="card" id="damage"><h3>Skadevurdering</h3><p>Rask deteksjon av stormskader, insektangrep og andre endringer.</p></div>
+    <div class="card" id="upload"><h3>Last opp bilder</h3><p>Opprett prosjekt og last opp drone- eller flybilder direkte i portalen.</p></div>
+    <div class="card" id="custom"><h3>Egne AI-modeller</h3><p>Tren modellen til å kjenne igjen spesifikke treslag eller skadetyper.</p></div>
+    <div class="card" id="start"><h3>Kom i gang</h3><p>Opprett konto og start ditt første prosjekt. Gratis å prøve.</p></div>
   </div>
 </div>
-
-<!-- Floating guide widget -->
 <div id="guide-bubble" onclick="toggleGuide()">🌲</div>
 <div id="guide-panel">
-  <div class="g-header">
-    <span>Biodrone-guide</span>
-    <span id="lang" style="background:#3dd68c;color:#0d3b2e;font-size:11px;padding:2px 8px;border-radius:10px;">NO</span>
-  </div>
+  <div class="g-header"><span>Biodrone-guide</span><span id="lang" style="background:#3dd68c;color:#0d3b2e;font-size:11px;padding:2px 8px;border-radius:10px;">NO</span></div>
   <div class="g-messages" id="g-messages">
     <div class="g-msg bot">Hei! Jeg er guiden. Skriv på ditt språk så viser jeg deg hva du bør gjøre.</div>
     <div class="sugs" id="sugs">
@@ -93,74 +70,87 @@
       <button class="sug" onclick="send('Hvordan kommer jeg i gang?')">Kom i gang</button>
     </div>
   </div>
-  <div class="g-input">
-    <input type="text" id="g-input" placeholder="Skriv her..." onkeypress="if(event.key==='Enter')sendInput()">
-    <button onclick="sendInput()">➤</button>
-  </div>
+  <div class="g-input"><input type="text" id="g-input" placeholder="Skriv her..." onkeypress="if(event.key==='Enter')sendInput()"><button onclick="sendInput()">➤</button></div>
 </div>
-
 <script>
-function toggleGuide() {
-  document.getElementById('guide-panel').classList.toggle('open');
-}
-function addMsg(text, isUser) {
-  const div = document.createElement('div');
-  div.className = 'g-msg ' + (isUser ? 'user' : 'bot');
-  div.textContent = text;
-  document.getElementById('g-messages').appendChild(div);
-  document.getElementById('g-messages').scrollTop = 9999;
-}
-function highlight(id) {
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight'));
-  const el = document.getElementById(id);
-  if (el) {
-    el.classList.add('highlight');
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-}
-function detectLang(t) {
-  const s = t.toLowerCase();
-  if (/[æøå]/.test(s) || /\b(jeg|vil|hjelp|tre|skog|skade|komme|hvordan)\b/.test(s)) return 'NO';
-  return 'EN';
-}
+function toggleGuide() { document.getElementById('guide-panel').classList.toggle('open'); }
+function addMsg(text, isUser) { const div = document.createElement('div'); div.className = 'g-msg ' + (isUser ? 'user' : 'bot'); div.textContent = text; document.getElementById('g-messages').appendChild(div); document.getElementById('g-messages').scrollTop = 9999; }
+function highlight(id) { document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight')); const el = document.getElementById(id); if (el) { el.classList.add('highlight'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
+function detectLang(t) { const s = t.toLowerCase(); if (/[æøå]/.test(s) || /\b(jeg|vil|hjelp|tre|skog|skade|komme|hvordan)\b/.test(s)) return 'NO'; return 'EN'; }
 function respond(text) {
   const lang = detectLang(text);
   document.getElementById('lang').textContent = lang;
   const q = text.toLowerCase();
-  let reply = '', target = null;
+  let steps = [];
   if (q.match(/tell|count|tre|tree|telle/)) {
-    target = 'trees';
-    reply = lang === 'NO' ? 'Du vil telle trær. Gå til «Kom i gang», opprett prosjekt og last opp bildene. Jeg har markert kortet.' : 'You want to count trees. Go to “Get started”, create a project and upload images.';
+    steps = lang === 'NO' ? [
+      { text: 'Du vil telle trær. Her er stegene:', target: null },
+      { text: '1. Klikk på «Kom i gang» og opprett en konto (eller logg inn).', target: 'start' },
+      { text: '2. Opprett et nytt prosjekt og last opp dronebildene dine.', target: 'upload' },
+      { text: '3. AI-en analyserer automatisk og teller alle trær + måler høyde. Du kan eksportere til GIS.', target: 'trees' },
+      { text: 'Vil du at jeg forklarer mer om opplasting eller eksport?', target: null }
+    ] : [
+      { text: 'You want to count trees. Here are the steps:', target: null },
+      { text: '1. Click “Get started” and create an account (or log in).', target: 'start' },
+      { text: '2. Create a new project and upload your drone images.', target: 'upload' },
+      { text: '3. The AI automatically counts all trees and measures height. You can export to GIS.', target: 'trees' },
+      { text: 'Want me to explain more about uploading or export?', target: null }
+    ];
   } else if (q.match(/skade|damage|storm|insekt/)) {
-    target = 'damage';
-    reply = lang === 'NO' ? 'For skadevurdering: last opp bilder etter hendelsen. Se kortet «Skadevurdering».' : 'For damage assessment: upload post-event imagery.';
-  } else if (q.match(/last opp|upload|komme i gang|start|opprett/)) {
-    target = 'start';
-    reply = lang === 'NO' ? 'Klikk «Kom i gang», opprett konto og last opp bildene i portalen.' : 'Click “Get started”, create an account and upload your images.';
-  } else if (q.match(/egen|custom|modell|treslag/)) {
-    target = 'custom';
-    reply = lang === 'NO' ? 'Du kan trene egne modeller. Se kortet «Egne AI-modeller».' : 'You can train custom models.';
+    steps = lang === 'NO' ? [
+      { text: 'For skadevurdering gjør du dette:', target: null },
+      { text: '1. Ta nye dronebilder etter stormen/insektangrepet.', target: null },
+      { text: '2. Last opp bildene i et eksisterende eller nytt prosjekt.', target: 'upload' },
+      { text: '3. AI-en sammenligner med tidligere bilder og markerer skadene automatisk.', target: 'damage' },
+      { text: 'Vil du ha tips til hvordan du tar bildene?', target: null }
+    ] : [
+      { text: 'For damage assessment:', target: null },
+      { text: '1. Capture new drone images after the event.', target: null },
+      { text: '2. Upload the images to a project.', target: 'upload' },
+      { text: '3. The AI compares with previous imagery and highlights damage.', target: 'damage' }
+    ];
+  } else if (q.match(/last opp|upload|komme i gang|start|opprett|konto/)) {
+    steps = lang === 'NO' ? [
+      { text: 'Slik kommer du i gang og laster opp:', target: null },
+      { text: '1. Klikk på knappen «Kom i gang» øverst.', target: 'start' },
+      { text: '2. Opprett konto og logg inn i portalen.', target: null },
+      { text: '3. Opprett et prosjekt og dra inn dronebildene.', target: 'upload' },
+      { text: 'Klar? Si fra hvis du står fast på et steg.', target: null }
+    ] : [
+      { text: 'How to get started and upload:', target: null },
+      { text: '1. Click the “Get started” button.', target: 'start' },
+      { text: '2. Create an account and log in.', target: null },
+      { text: '3. Create a project and upload your images.', target: 'upload' }
+    ];
+  } else if (q.match(/egen|custom|modell|treslag|trene/)) {
+    steps = lang === 'NO' ? [
+      { text: 'Du kan trene egne AI-modeller:', target: null },
+      { text: '1. Gå til innstillinger for prosjektet etter at du har lastet opp bilder.', target: 'custom' },
+      { text: '2. Merk opp noen eksempler på treslaget/skadetypen du vil kjenne igjen.', target: null },
+      { text: '3. Start treningen – det tar vanligvis noen timer.', target: null }
+    ] : [
+      { text: 'You can train custom models:', target: null },
+      { text: '1. After uploading images, go to project settings.', target: 'custom' },
+      { text: '2. Label some examples of the species or damage type.', target: null },
+      { text: '3. Start training.', target: null }
+    ];
   } else {
-    reply = lang === 'NO' ? 'Fortell meg mer (telle trær, skade, laste opp…), så viser jeg deg.' : 'Tell me more and I’ll guide you.';
+    steps = lang === 'NO' ? [
+      { text: 'Fortell meg mer om hva du vil gjøre, så guider jeg deg steg for steg.', target: null },
+      { text: 'Eksempler: telle trær, vurdere skade, laste opp bilder, trene egen modell.', target: null }
+    ] : [
+      { text: 'Tell me more about what you want to do and I’ll guide you step by step.', target: null }
+    ];
   }
-  setTimeout(() => {
-    addMsg(reply);
-    if (target) highlight(target);
-  }, 400);
+  steps.forEach((step, i) => {
+    setTimeout(() => {
+      addMsg(step.text);
+      if (step.target) highlight(step.target);
+    }, 600 * (i + 1));
+  });
 }
-function send(text) {
-  if (!text.trim()) return;
-  addMsg(text, true);
-  document.getElementById('sugs')?.remove();
-  respond(text);
-}
-function sendInput() {
-  const el = document.getElementById('g-input');
-  const text = el.value.trim();
-  if (!text) return;
-  el.value = '';
-  send(text);
-}
+function send(text) { if (!text.trim()) return; addMsg(text, true); document.getElementById('sugs')?.remove(); respond(text); }
+function sendInput() { const el = document.getElementById('g-input'); const text = el.value.trim(); if (!text) return; el.value = ''; send(text); }
 </script>
 </body>
 </html>
