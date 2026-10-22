@@ -76,7 +76,13 @@
 function toggleGuide() { document.getElementById('guide-panel').classList.toggle('open'); }
 function addMsg(text, isUser) { const div = document.createElement('div'); div.className = 'g-msg ' + (isUser ? 'user' : 'bot'); div.textContent = text; document.getElementById('g-messages').appendChild(div); document.getElementById('g-messages').scrollTop = 9999; }
 function highlight(id) { document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight')); const el = document.getElementById(id); if (el) { el.classList.add('highlight'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
-function detectLang(t) { const s = t.toLowerCase(); if (/[æøå]/.test(s) || /\b(jeg|vil|hjelp|tre|skog|skade|komme|hvordan)\b/.test(s)) return 'NO'; return 'EN'; }
+function detectLang(t) {
+  const s = t.toLowerCase();
+  if (/[æøå]/.test(s) || /\b(jeg|vil|hjelp|tre|trær|skog|skade|komme|hvordan|telle|opprett|last|opp|gang|modellen)\b/.test(s)) {
+    return 'NO';
+  }
+  return 'EN';
+}
 function respond(text) {
   const lang = detectLang(text);
   document.getElementById('lang').textContent = lang;
