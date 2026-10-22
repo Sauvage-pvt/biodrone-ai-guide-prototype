@@ -68,6 +68,7 @@
       <button class="sug" onclick="send('How do I upload images?')">Upload images</button>
       <button class="sug" onclick="send('Skadevurdering')">Skadevurdering</button>
       <button class="sug" onclick="send('Hvordan kommer jeg i gang?')">Kom i gang</button>
+      <button class="sug" onclick="send('start registrering')">Ny registrering</button>
     </div>
   </div>
   <div class="g-input"><input type="text" id="g-input" placeholder="Skriv her..." onkeypress="if(event.key==='Enter')sendInput()"><button onclick="sendInput()">➤</button></div>
@@ -115,18 +116,50 @@ function respond(text) {
       { text: '2. Upload the images to a project.', target: 'upload' },
       { text: '3. The AI compares with previous imagery and highlights damage.', target: 'damage' }
     ];
-  } else if (q.match(/last opp|upload|komme i gang|start|opprett|konto/)) {
+  } else if (q.match(/komme i gang|start|opprett|konto|registrer|kom i gang/)) {
     steps = lang === 'NO' ? [
-      { text: 'Slik kommer du i gang og laster opp:', target: null },
-      { text: '1. Klikk på knappen «Kom i gang» øverst.', target: 'start' },
-      { text: '2. Opprett konto og logg inn i portalen.', target: null },
-      { text: '3. Opprett et prosjekt og dra inn dronebildene.', target: 'upload' },
-      { text: 'Klar? Si fra hvis du står fast på et steg.', target: null }
+      { text: 'Slik kommer du i gang – ny og enklere flyt:', target: null },
+      { text: '1. Klikk «Kom i gang». Du kan velge Google, Microsoft eller e-post + passord (med bot-beskyttelse).', target: 'start' },
+      { text: '2. Du er inne med en gang – ingen e-postbekreftelse som stopper deg.', target: null },
+      { text: '3. Jeg stiller noen korte spørsmål så vi kan hjelpe deg best mulig:', target: null },
+      { text: '• Hva vil du bruke Biodrone til? (skog, vilt, inspeksjon, landbruk…)', target: null },
+      { text: '• Har du dronebilder klare?', target: null },
+      { text: '• Hvem registrerer seg? (skogeier, dronefirma, offentlig…)', target: null },
+      { text: '• Hvor stort område? (valgfritt)', target: null },
+      { text: 'Svarene avgjør hvilken oppfølging og eksempelprosjekt du får.', target: null },
+      { text: 'Klar til å prøve? Si «start registrering» så viser jeg flyten.', target: 'start' }
     ] : [
-      { text: 'How to get started and upload:', target: null },
-      { text: '1. Click the “Get started” button.', target: 'start' },
-      { text: '2. Create an account and log in.', target: null },
-      { text: '3. Create a project and upload your images.', target: 'upload' }
+      { text: 'How to get started – new and simpler flow:', target: null },
+      { text: '1. Click “Get started”. Choose Google, Microsoft or email + password (with bot protection).', target: 'start' },
+      { text: '2. You’re in immediately – no email confirmation that stops you.', target: null },
+      { text: '3. I’ll ask a few short questions so we can help you best:', target: null },
+      { text: '• What will you use Biodrone for?', target: null },
+      { text: '• Do you have drone images ready?', target: null },
+      { text: '• Who is registering?', target: null },
+      { text: '• How large is the area? (optional)', target: null }
+    ];
+  } else if (q.match(/start registrering|registrer meg|opprett konto/)) {
+    steps = lang === 'NO' ? [
+      { text: 'Her er den nye registreringsflyten:', target: null },
+      { text: '【 Velg innloggingsmetode 】', target: null },
+      { text: '• Fortsett med Google', target: null },
+      { text: '• Fortsett med Microsoft', target: null },
+      { text: '• Eller e-post + passord (Turnstile beskytter mot bots)', target: null },
+      { text: '→ Du er inne med en gang.', target: null },
+      { text: '【 Kvalifisering 】', target: null },
+      { text: '1. Hva vil du bruke Biodrone til?', target: null },
+      { text: '   Skog / Viltregistrering / Inspeksjon / Landbruk / Natur & miljø / Annet', target: null },
+      { text: '2. Har du dronebilder klare?', target: null },
+      { text: '   Ja nå / Skal fly snart / Trenger noen som flyr', target: null },
+      { text: '3. Hvem registrerer seg?', target: null },
+      { text: '   Skogeier / Dronefirma / Offentlig / Forskning / Privat', target: null },
+      { text: '4. Hvor stort område? (valgfritt)', target: null },
+      { text: '   Under 50 daa / 50–500 daa / Over 500 daa', target: null },
+      { text: 'Etter dette får du riktig oppfølging og eksempelprosjekt.', target: 'start' }
+    ] : [
+      { text: 'Here’s the new registration flow:', target: null },
+      { text: 'Choose login method → you’re in immediately.', target: null },
+      { text: 'Then a few qualifying questions about use case, images, who you are, and area size.', target: null }
     ];
   } else if (q.match(/egen|custom|modell|treslag|trene/)) {
     steps = lang === 'NO' ? [
