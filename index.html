@@ -73,7 +73,7 @@ function checkPw() {
 <div class="hero">
   <h1>Skogforvaltning gjort enklere</h1>
   <p>Last opp dronebilder og få AI-analyse av trær, høyde, skade og mer – på minutter.</p>
-  <a href="#start" class="btn">Kom i gang</a>
+  <a href="#start" class="btn" onclick="openGuideAndStart(); return false;">Kom i gang</a>
 </div>
 <div class="content">
   <div class="impact">
@@ -95,7 +95,7 @@ function checkPw() {
     <div class="card" id="start"><h3>Kom i gang</h3><p>Ny og enklere registrering. Gratis å prøve.</p></div>
   </div>
 </div>
-<div id="guide-bubble" onclick="toggleGuide()">🌲</div>
+<div id="guide-bubble" onclick="toggleGuide()" title="Klikk for hjelp">🌲</div>
 <div id="guide-panel">
   <div class="g-header"><span>Biodrone-guide</span><span id="lang" style="background:#3dd68c;color:#0d3b2e;font-size:11px;padding:2px 8px;border-radius:10px;">NO</span></div>
   <div class="g-messages" id="g-messages">
@@ -109,6 +109,13 @@ function checkPw() {
   <div class="g-input"><input type="text" id="g-input" placeholder="Skriv her..." onkeypress="if(event.key==='Enter')sendInput()"><button onclick="sendInput()">➤</button></div>
 </div>
 <script>
+function openGuideAndStart() {
+  const panel = document.getElementById('guide-panel');
+  if (!panel.classList.contains('open')) {
+    panel.classList.add('open');
+  }
+  setTimeout(() => { send('start registrering'); }, 300);
+}
 function toggleGuide() { document.getElementById('guide-panel').classList.toggle('open'); }
 function addMsg(text, isUser) { const div = document.createElement('div'); div.className = 'g-msg ' + (isUser ? 'user' : 'bot'); div.innerHTML = text; document.getElementById('g-messages').appendChild(div); document.getElementById('g-messages').scrollTop = 9999; }
 function highlight(id) { document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight')); const el = document.getElementById(id); if (el) { el.classList.add('highlight'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
