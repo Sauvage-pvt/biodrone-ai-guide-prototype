@@ -138,28 +138,59 @@ function respond(text) {
       { text: '• Who is registering?', target: null },
       { text: '• How large is the area? (optional)', target: null }
     ];
-  } else if (q.match(/start registrering|registrer meg|opprett konto/)) {
+  } else if (q.match(/start registrering|registrer meg|opprett konto|ny registrering/)) {
     steps = lang === 'NO' ? [
-      { text: 'Her er den nye registreringsflyten:', target: null },
-      { text: '【 Velg innloggingsmetode 】', target: null },
-      { text: '• Fortsett med Google', target: null },
-      { text: '• Fortsett med Microsoft', target: null },
-      { text: '• Eller e-post + passord (Turnstile beskytter mot bots)', target: null },
-      { text: '→ Du er inne med en gang.', target: null },
-      { text: '【 Kvalifisering 】', target: null },
-      { text: '1. Hva vil du bruke Biodrone til?', target: null },
-      { text: '   Skog / Viltregistrering / Inspeksjon / Landbruk / Natur & miljø / Annet', target: null },
-      { text: '2. Har du dronebilder klare?', target: null },
-      { text: '   Ja nå / Skal fly snart / Trenger noen som flyr', target: null },
-      { text: '3. Hvem registrerer seg?', target: null },
-      { text: '   Skogeier / Dronefirma / Offentlig / Forskning / Privat', target: null },
-      { text: '4. Hvor stort område? (valgfritt)', target: null },
-      { text: '   Under 50 daa / 50–500 daa / Over 500 daa', target: null },
-      { text: 'Etter dette får du riktig oppfølging og eksempelprosjekt.', target: 'start' }
+      { text: 'Ny registreringsflyt – steg for steg:', target: null },
+      { text: 'Steg 1: Velg hvordan du vil opprette konto', target: 'start' },
+      { text: '• [Fortsett med Google]', target: null },
+      { text: '• [Fortsett med Microsoft]', target: null },
+      { text: '• [E-post + passord] + Cloudflare Turnstile (usynlig bot-sjekk)', target: null },
+      { text: '→ Du er inne med en gang. Ingen e-postbekreftelse.', target: null },
+      { text: 'Steg 2: Kvalifisering (jeg stiller spørsmålene)', target: null },
+      { text: 'Spørsmål 1: Hva vil du bruke Biodrone til?', target: null },
+      { text: 'A) Skog (bestand, skader, tilvekst)', target: null },
+      { text: 'B) Viltregistrering', target: null },
+      { text: 'C) Inspeksjon (stier, linjer, infrastruktur)', target: null },
+      { text: 'D) Landbruk / presisjonsjordbruk', target: null },
+      { text: 'E) Natur og miljøovervåking', target: null },
+      { text: 'F) Annet', target: null },
+      { text: 'Spørsmål 2: Har du dronebilder klare?', target: null },
+      { text: '• Ja, jeg har bilder nå', target: null },
+      { text: '• Jeg skal fly snart', target: null },
+      { text: '• Nei, jeg trenger noen som flyr for meg', target: null },
+      { text: 'Spørsmål 3: Hvem registrerer seg?', target: null },
+      { text: '• Skogeier / skogselskap', target: null },
+      { text: '• Dronefirma / tjenesteleverandør', target: null },
+      { text: '• Offentlig forvaltning', target: null },
+      { text: '• Forskning / utdanning', target: null },
+      { text: '• Privatperson', target: null },
+      { text: 'Spørsmål 4 (valgfritt): Hvor stort område?', target: null },
+      { text: '• Under 50 daa', target: null },
+      { text: '• 50–500 daa', target: null },
+      { text: '• Over 500 daa', target: null },
+      { text: 'Etter svarene:', target: null },
+      { text: '→ Du får riktig eksempelprosjekt', target: null },
+      { text: '→ Riktig oppfølging (skog → deg, dronefirma → partner-pitch)', target: null },
+      { text: '→ Riktig e-postsekvens', target: null },
+      { text: 'Vil du teste et svar? Skriv f.eks. «skog + har bilder + skogeier»', target: null }
     ] : [
-      { text: 'Here’s the new registration flow:', target: null },
-      { text: 'Choose login method → you’re in immediately.', target: null },
-      { text: 'Then a few qualifying questions about use case, images, who you are, and area size.', target: null }
+      { text: 'New registration flow – step by step:', target: null },
+      { text: '1. Choose Google, Microsoft or email+password (with Turnstile)', target: null },
+      { text: '2. You’re in immediately', target: null },
+      { text: '3. Qualifying questions about use case, images, who you are, and area size', target: null },
+      { text: '4. You get the right example project and follow-up', target: null }
+    ];
+  } else if (q.match(/skog.*bilder|skogeier|dronefirma|har bilder|skal fly/)) {
+    steps = lang === 'NO' ? [
+      { text: 'Bra, jeg har notert svarene dine.', target: null },
+      { text: 'Basert på det du sa:', target: null },
+      { text: '→ Du får et eksempelprosjekt med skogdata', target: 'trees' },
+      { text: '→ Oppfølging fra skogteamet', target: null },
+      { text: '→ E-post med tips om opplasting og analyse', target: null },
+      { text: 'Neste steg: Opprett prosjekt og last opp bildene.', target: 'upload' },
+      { text: 'Vil du at jeg guider deg videre til opplasting?', target: null }
+    ] : [
+      { text: 'Got it. Based on your answers you’ll get a forest example project and the right follow-up.', target: null }
     ];
   } else if (q.match(/egen|custom|modell|treslag|trene/)) {
     steps = lang === 'NO' ? [
