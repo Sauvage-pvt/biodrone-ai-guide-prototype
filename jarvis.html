@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarvis Light – Web prototype</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+  header { padding: 40px 32px; text-align: center; }
+  header h1 { font-size: 36px; color: #38bdf8; }
+  header p { color: #94a3b8; margin-top: 8px; }
+  .demo-area { max-width: 900px; margin: 0 auto; padding: 20px; }
+  .demo-card { background: #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 16px; border: 1px solid #334155; }
+  .demo-card h3 { color: #38bdf8; margin-bottom: 8px; }
+  .demo-card button { background: #0ea5e9; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+  .demo-card button:hover { background: #0284c7; }
+  .highlight { outline: 3px solid #38bdf8; outline-offset: 4px; background: rgba(56,189,248,0.1) !important; }
+  #jarvis-bubble { position: fixed; bottom: 24px; right: 24px; width: 64px; height: 64px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; box-shadow: 0 4px 20px rgba(14,165,233,0.4); z-index: 9999; transition: transform 0.2s; }
+  #jarvis-bubble:hover { transform: scale(1.1); }
+  #jarvis-bubble.listening { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(14,165,233,0.6); } 50% { box-shadow: 0 0 0 12px rgba(14,165,233,0); } }
+  #jarvis-panel { position: fixed; bottom: 100px; right: 24px; width: 360px; height: 480px; background: #1e293b; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); display: none; flex-direction: column; z-index: 9999; border: 1px solid #334155; }
+  #jarvis-panel.open { display: flex; }
+  .j-header { background: linear-gradient(90deg, #0ea5e9, #6366f1); padding: 14px 16px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; border-radius: 16px 16px 0 0; }
+  .j-messages { flex: 1; overflow-y: auto; padding: 16px; }
+  .j-msg { margin-bottom: 10px; max-width: 90%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.4; }
+  .j-msg.bot { background: #334155; }
+  .j-msg.user { background: #0ea5e9; margin-left: auto; }
+  .j-input { display: flex; padding: 12px; gap: 8px; border-top: 1px solid #334155; }
+  .j-input input { flex: 1; padding: 10px 14px; border: 1px solid #475569; border-radius: 20px; background: #0f172a; color: white; outline: none; }
+  .j-input button { background: #0ea5e9; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; }
+  .j-input button.mic { background: #6366f1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Jarvis Light</h1>
+  <p>En enkel web-prototype. Klikk på sirkelen nede til høyre.</p>
+</header>
+<div class="demo-area">
+  <div class="demo-card" id="card-upload"><h3>Last opp bilder</h3><p>Her kan du laste opp dronebilder for analyse.</p><button onclick="alert('Opplasting startet')">Velg filer</button></div>
+  <div class="demo-card" id="card-analyze"><h3>Start analyse</h3><p>Kjør AI-analyse på de opplastede bildene.</p><button>Analyser nå</button></div>
+  <div class="demo-card" id="card-export"><h3>Eksporter resultater</h3><p>Last ned data til GIS eller Excel.</p><button>Eksporter</button></div>
+  <div class="demo-card" id="card-settings"><h3>Innstillinger</h3><p>Juster modell og preferanser.</p><button>Åpne innstillinger</button></div>
+</div>
+<div id="jarvis-bubble" onclick="toggleJarvis()">⚡</div>
+<div id="jarvis-panel">
+  <div class="j-header"><span>Jarvis</span><span style="font-size:12px;opacity:0.8;">online</span></div>
+  <div class="j-messages" id="j-messages"><div class="j-msg bot">Hei. Jeg er Jarvis. Hva kan jeg hjelpe deg med?</div></div>
+  <div class="j-input">
+    <input type="text" id="j-input" placeholder="Skriv eller snakk..." onkeypress="if(event.key==='Enter')sendText()">
+    <button class="mic" onclick="startVoice()" title="Snakk">🎤</button>
+    <button onclick="sendText()">➤</button>
+  </div>
+</div>
+<script>
+function toggleJarvis() { document.getElementById('jarvis-panel').classList.toggle('open'); }
+function addMsg(text, isUser) { const div = document.createElement('div'); div.className = 'j-msg ' + (isUser ? 'user' : 'bot'); div.textContent = text; document.getElementById('j-messages').appendChild(div); document.getElementById('j-messages').scrollTop = 9999; }
+function highlight(id) { document.querySelectorAll('.demo-card').forEach(c => c.classList.remove('highlight')); const el = document.getElementById(id); if (el) { el.classList.add('highlight'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
+function respond(input) {
+  const q = input.toLowerCase();
+  if (q.match(/last opp|upload|bilde/)) { addMsg('Jeg viser deg opplastingsområdet.'); highlight('card-upload'); }
+  else if (q.match(/analys|kjør|start/)) { addMsg('Her starter du analysen.'); highlight('card-analyze'); }
+  else if (q.match(/eksport|last ned|gis/)) { addMsg('Her eksporterer du resultatene.'); highlight('card-export'); }
+  else if (q.match(/innstilling|setting|modell/)) { addMsg('Innstillingene ligger her.'); highlight('card-settings'); }
+  else if (q.match(/hei|hallo|jarvis/)) { addMsg('Hei. Hva trenger du hjelp med?'); }
+  else { addMsg('Jeg kan peke deg til opplasting, analyse, eksport eller innstillinger. Hva vil du gjøre?'); }
+}
+function sendText() { const el = document.getElementById('j-input'); const text = el.value.trim(); if (!text) return; el.value = ''; addMsg(text, true); setTimeout(() => respond(text), 400); }
+function startVoice() { const bubble = document.getElementById('jarvis-bubble'); bubble.classList.add('listening'); addMsg('Lytter... (simulerer stemme)'); setTimeout(() => { bubble.classList.remove('listening'); const fake = 'vis meg opplasting'; addMsg(fake, true); respond(fake); }, 1800); }
+</script>
+</body>
+</html>
