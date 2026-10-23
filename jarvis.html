@@ -15,7 +15,7 @@
   .demo-card h3 { color: #38bdf8; margin-bottom: 8px; }
   .demo-card button { background: #0ea5e9; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
   .demo-card button:hover { background: #0284c7; }
-  .highlight { outline: 3px solid #38bdf8; outline-offset: 4px; background: rgba(56,189,248,0.1) !important; }
+  .highlight { outline: 4px solid #38bdf8 !important; outline-offset: 6px; background: rgba(56,189,248,0.2) !important; box-shadow: 0 0 0 8px rgba(56,189,248,0.15); transition: all 0.3s; }
   #jarvis-bubble { position: fixed; bottom: 24px; right: 24px; width: 64px; height: 64px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; box-shadow: 0 4px 20px rgba(14,165,233,0.4); z-index: 9999; transition: transform 0.2s; }
   #jarvis-bubble:hover { transform: scale(1.1); }
   #jarvis-bubble.listening { animation: pulse 1s infinite; }
@@ -60,15 +60,16 @@ function addMsg(text, isUser) { const div = document.createElement('div'); div.c
 function highlight(id) { document.querySelectorAll('.demo-card').forEach(c => c.classList.remove('highlight')); const el = document.getElementById(id); if (el) { el.classList.add('highlight'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
 function respond(input) {
   const q = input.toLowerCase();
-  if (q.match(/last opp|upload|bilde/)) { addMsg('Jeg viser deg opplastingsområdet.'); highlight('card-upload'); }
-  else if (q.match(/analys|kjør|start/)) { addMsg('Her starter du analysen.'); highlight('card-analyze'); }
-  else if (q.match(/eksport|last ned|gis/)) { addMsg('Her eksporterer du resultatene.'); highlight('card-export'); }
-  else if (q.match(/innstilling|setting|modell/)) { addMsg('Innstillingene ligger her.'); highlight('card-settings'); }
-  else if (q.match(/hei|hallo|jarvis/)) { addMsg('Hei. Hva trenger du hjelp med?'); }
-  else { addMsg('Jeg kan peke deg til opplasting, analyse, eksport eller innstillinger. Hva vil du gjøre?'); }
+  document.querySelectorAll('.demo-card').forEach(c => c.classList.remove('highlight'));
+  if (q.match(/last opp|upload|bilde|fil/)) { addMsg('Jeg markerer «Last opp bilder» for deg.'); highlight('card-upload'); }
+  else if (q.match(/analys|kjør|start|kjore/)) { addMsg('Her er knappen for å starte analysen.'); highlight('card-analyze'); }
+  else if (q.match(/eksport|last ned|gis|excel/)) { addMsg('Jeg viser deg eksport-området.'); highlight('card-export'); }
+  else if (q.match(/innstilling|setting|modell|preferanse/)) { addMsg('Innstillingene ligger her.'); highlight('card-settings'); }
+  else if (q.match(/hei|hallo|jarvis|hjelp/)) { addMsg('Hei! Prøv å skrive «last opp», «analyser», «eksporter» eller «innstillinger» så peker jeg.'); }
+  else { addMsg('Jeg forsto ikke helt. Prøv: last opp, analyser, eksporter eller innstillinger.'); }
 }
 function sendText() { const el = document.getElementById('j-input'); const text = el.value.trim(); if (!text) return; el.value = ''; addMsg(text, true); setTimeout(() => respond(text), 400); }
-function startVoice() { const bubble = document.getElementById('jarvis-bubble'); bubble.classList.add('listening'); addMsg('Lytter... (simulerer stemme)'); setTimeout(() => { bubble.classList.remove('listening'); const fake = 'vis meg opplasting'; addMsg(fake, true); respond(fake); }, 1800); }
+function startVoice() { const bubble = document.getElementById('jarvis-bubble'); bubble.classList.add('listening'); addMsg('Lytter... (simulerer stemme)'); setTimeout(() => { bubble.classList.remove('listening'); const fake = 'last opp bilder'; addMsg(fake, true); respond(fake); }, 1800); }
 </script>
 </body>
 </html>
